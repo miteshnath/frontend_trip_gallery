@@ -17,6 +17,7 @@ import {
 	CRow
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
+import { Redirect } from 'react-router';
 
 class Login extends Component {
 	constructor(props) {
@@ -27,8 +28,6 @@ class Login extends Component {
 			isUserAuthenticated: false
 		};
 	}
-
-	componentDidUpdate(e) {}
 
 	setUserName = (event) => {
 		this.setState({ userName: event.target.value });
@@ -41,7 +40,7 @@ class Login extends Component {
 	logIn = () => {
 		axios
 			.post(
-				'http://localhost:5000/login',
+				process.env.REACT_APP_BACKEND_URL + '/login',
 				{ username: this.state.userName, password: this.state.passWord },
 				{ headers: { 'Content-Type': 'application/json' } }
 			)
@@ -136,10 +135,8 @@ class Login extends Component {
 						</CRow>
 					</CContainer>
 				)}
-				<Notifications options={{zIndex: 200, top: '50px'}} />
-				{/* {
-          this.state.isUserAuthenticated 
-        } */}
+				<Notifications options={{ zIndex: 200, top: '50px' }} />
+				{this.state.isUserAuthenticated && <Redirect to={'/dashboard' + this.state.selectedTrip} />}
 			</div>
 		);
 	}

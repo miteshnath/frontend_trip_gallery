@@ -63,7 +63,7 @@ class AddTrip extends React.Component {
 	submitAddTrip = () => {
 		axios
 			.post(
-				'http://localhost:5000/trips',
+				process.env.REACT_APP_BACKEND_URL + '/trips',
 				{
 					name: this.state.tripName,
 					start_date: this.state.tripStart,
@@ -88,7 +88,7 @@ class AddTrip extends React.Component {
 
 	componentDidMount = () => {
 		axios
-			.get('http://localhost:5000/trips', {
+			.get(process.env.REACT_APP_BACKEND_URL + '/trips', {
 				headers: { 'Content-Type': 'application/json', Authorization: localStorage.getItem('jwt_token') }
 			})
 			.then((res) => {
@@ -137,7 +137,7 @@ class AddTrip extends React.Component {
 		for (const key of Object.keys(this.state.imgCollection)) {
 			formData.append('imgCollection', this.state.imgCollection[key]);
 		}
-		axios.post('http://localhost:5000/trips/13/photos', formData, {}).then((res) => {
+		axios.post(process.env.REACT_APP_BACKEND_URL + '/trips/13/photos', formData, {}).then((res) => {
 			console.log(res.data);
 		});
 	};
@@ -149,7 +149,7 @@ class AddTrip extends React.Component {
 	submitAddAdditionalLocation = () => {
 		axios
 			.patch(
-				'http://localhost:5000/trips/' + this.state.selectedTripId,
+				process.env.REACT_APP_BACKEND_URL + '/trips/' + this.state.selectedTripId,
 				{ locations: this.state.additionalLocation },
 				{
 					headers: {
@@ -181,7 +181,7 @@ class AddTrip extends React.Component {
 		let bodyFormData = new FormData();
 		bodyFormData.append('file', this.state.tripPhotoFile);
 		axios
-			.post('http://localhost:5000/trips/' + this.state.selectedTripId + '/photos', bodyFormData, {
+			.post(process.env.REACT_APP_BACKEND_URL + '/trips/' + this.state.selectedTripId + '/photos', bodyFormData, {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded',
 					Authorization: localStorage.getItem('jwt_token')

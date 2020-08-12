@@ -48,7 +48,7 @@ class UserProfile extends React.Component {
 
 	componentDidMount() {
 		axios
-			.get('http://localhost:5000/user-profile', {
+			.get(process.env.REACT_APP_BACKEND_URL + '/user-profile', {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: localStorage.getItem('jwt_token')

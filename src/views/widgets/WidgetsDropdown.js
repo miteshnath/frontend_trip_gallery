@@ -1,42 +1,39 @@
-import React from 'react'
-import axios from 'axios'
+import React from 'react';
+import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
 import {
-  CButton,
-  CWidgetDropdown,
-  CRow,
-  CCol,
-  CDropdown,
-  CDropdownMenu,
-  CDropdownItem,
-  CDropdownToggle
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import ChartLineSimple from '../charts/ChartLineSimple'
-import ChartBarSimple from '../charts/ChartBarSimple'
-import { Redirect } from 'react-router'
-
+	CButton,
+	CWidgetDropdown,
+	CRow,
+	CCol,
+	CDropdown,
+	CDropdownMenu,
+	CDropdownItem,
+	CDropdownToggle
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { Redirect } from 'react-router';
 
 class WidgetsDropdown extends React.Component {
-  constructor(props) {
-    super(props); {
-      this.state = {
-        userTrips: [],
-        goToTrip: false,
-        goToTripMap: false,
-        selectedTrip: null
-      }
-    }
-  }
+	constructor(props) {
+		super(props);
+		{
+			this.state = {
+				userTrips: [],
+				goToTrip: false,
+				goToTripMap: false,
+				selectedTrip: null
+			};
+		}
+	}
 
-  componentDidMount() {
-    axios
-			.get(
-				'http://localhost:5000/trips',
-				{ headers: { 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('jwt_token')} }
-			)
+	componentDidMount() {
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + '/trips', {
+				headers: { 'Content-Type': 'application/json', Authorization: localStorage.getItem('jwt_token') }
+			})
 			.then((res) => {
-        this.setState({userTrips: res.data.trips})
+				this.setState({ userTrips: res.data.trips });
 			})
 			.catch((err) => {
 				if (err.response) {
@@ -47,59 +44,46 @@ class WidgetsDropdown extends React.Component {
 					console.log(err.message);
 				}
 			});
-  }
+	}
 
-  handleViewDetails = (id) =>  {
-    this.setState({selectedTrip: id})
-    this.setState({goToTrip: !this.state.goToTrip})
-  }
+	handleViewDetails = (id) => {
+		this.setState({ selectedTrip: id });
+		this.setState({ goToTrip: !this.state.goToTrip });
+	};
 
-  handleTripMapView = (id) => {
-    this.setState({selectedTrip: id})
-    this.setState({goToTripMap: !this.state.goToTrip})
-  }
+	handleTripMapView = (id) => {
+		this.setState({ selectedTrip: id });
+		this.setState({ goToTripMap: !this.state.goToTrip });
+	};
 
-  render() {
-    if (this.state.goToTrip) {
-       return <Redirect to={'/trips/' +  this.state.selectedTrip}/>;
-    }
-
-    if (this.state.goToTripMap) {
-      return <Redirect to={'/trip-maps/' + this.state.selectedTrip}/>
-    }
-
-    let trips = [];
-		for (let trip of this.state.userTrips) {
-			// note: we add a key prop here to allow react to uniquely identify each
-			// element in this array. see: https://reactjs.org/docs/lists-and-keys.html
-			trips.push(
-      <CCol sm="6" lg="3" key={trip.id}>
-        <CWidgetDropdown
-          color="gradient-primary"
-          header={trip.name}
-          text=""
-          footerSlot={
-            <hr/>
-          }
-        >
-          <CDropdown>
-            <CDropdownToggle color="transparent">
-              <CIcon name="cil-settings"/>
-            </CDropdownToggle>
-            <CDropdownMenu className="pt-0" placement="bottom-end">
-              <CDropdownItem onClick={() => this.handleViewDetails(trip.id)}>Details</CDropdownItem>
-              <CDropdownItem onClick={() => this.handleTripMapView(trip.id)}>Trip Map</CDropdownItem>
-            </CDropdownMenu>
-          </CDropdown>
-        </CWidgetDropdown>
-      </CCol>);
+	render() {
+		if (this.state.goToTrip) {
+			return <Redirect to={'/trips/' + this.state.selectedTrip} />;
 		}
-    return (
-    <CRow>
-      {trips}
-    </CRow>
-  )
-  }
 
+		if (this.state.goToTripMap) {
+			return <Redirect to={'/trip-maps/' + this.state.selectedTrip} />;
+		}
+
+		let trips = [];
+		for (let trip of this.state.userTrips) {
+			trips.push(
+				<CCol sm="6" lg="3" key={trip.id}>
+					<CWidgetDropdown color="gradient-primary" header={trip.name} text="" footerSlot={<hr />}>
+						<CDropdown>
+							<CDropdownToggle color="transparent">
+								<CIcon name="cil-settings" />
+							</CDropdownToggle>
+							<CDropdownMenu className="pt-0" placement="bottom-end">
+								<CDropdownItem onClick={() => this.handleViewDetails(trip.id)}>Details</CDropdownItem>
+								<CDropdownItem onClick={() => this.handleTripMapView(trip.id)}>Trip Map</CDropdownItem>
+							</CDropdownMenu>
+						</CDropdown>
+					</CWidgetDropdown>
+				</CCol>
+			);
+		}
+		return <CRow>{trips}</CRow>;
+	}
 }
-export default WidgetsDropdown
+export default WidgetsDropdown;

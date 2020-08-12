@@ -25,7 +25,7 @@ class Trip extends React.Component {
 	componentDidMount() {
 		const tripId = this.props.match.params.id;
 		axios
-			.get('http://localhost:5000/trips/' + tripId, {
+			.get(process.env.REACT_APP_BACKEND_URL + '/trips/' + tripId, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: localStorage.getItem('jwt_token')
