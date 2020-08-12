@@ -53,10 +53,10 @@
     "react-select": "^3.1.0",
     "react-simple-maps": "^2.1.2",
     "react-tag-input": "^6.4.3",
-    "redux": "4.0.5"
+    "redux": "4.0.5",
+    "react-scripts": "^3.4.1"
   },
   "devDependencies": {
-    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
