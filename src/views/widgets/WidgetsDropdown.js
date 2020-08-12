@@ -1,16 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
-import {
-	CButton,
-	CWidgetDropdown,
-	CRow,
-	CCol,
-	CDropdown,
-	CDropdownMenu,
-	CDropdownItem,
-	CDropdownToggle
-} from '@coreui/react';
+import { CWidgetDropdown, CRow, CCol, CDropdown, CDropdownMenu, CDropdownItem, CDropdownToggle } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { Redirect } from 'react-router';
 
@@ -83,7 +74,12 @@ class WidgetsDropdown extends React.Component {
 				</CCol>
 			);
 		}
-		return <CRow>{trips}</CRow>;
+		return (
+			<div>
+				<CRow>{trips}</CRow>;
+				<Notifications />
+			</div>
+		);
 	}
 }
 export default WidgetsDropdown;

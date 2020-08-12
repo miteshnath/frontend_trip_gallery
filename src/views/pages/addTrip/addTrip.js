@@ -1,7 +1,6 @@
 import React, { lazy } from 'react';
 import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
-import { Redirect } from 'react-router';
 
 import {
 	CButton,
@@ -50,6 +49,37 @@ class AddTrip extends React.Component {
 		};
 	}
 
+	componentDidMount = () => {
+		let token = localStorage.getItem('jwt_token');
+		if (token) {
+			this.setState({isUserAuthenticated: true})
+		}
+
+		axios
+			.get(process.env.REACT_APP_BACKEND_URL + '/trips', {
+				headers: { 'Content-Type': 'application/json', Authorization: localStorage.getItem('jwt_token') }
+			})
+			.then((res) => {
+				this.setState({ userTrips: res.data.trips });
+				let tripOptions = [];
+				for (let i = 0; i < res.data.trips.length; i++) {
+					let name = res.data.trips[i]['name'];
+					let id = res.data.trips[i]['id'];
+					tripOptions.push({ value: name, label: name, id: id });
+				}
+				this.setState({ userTripOptions: tripOptions });
+			})
+			.catch((err) => {
+				if (err.response) {
+					notify.show('oops! something unexpected occurred', 'error', 1000);
+				} else if (err.request) {
+					console.log(err.request);
+				} else if (err.message) {
+					console.log(err.message);
+				}
+			});
+	};
+
 	setAddTrip = () => {
 		this.setState({ addTrip: !this.state.addTrip });
 	};
@@ -80,37 +110,6 @@ class AddTrip extends React.Component {
 			.catch((err) => {
 				if (err.response) {
 					notify.show(err.response.data.error, 'error', 1000);
-				} else if (err.request) {
-					console.log(err.request);
-				} else if (err.message) {
-					console.log(err.message);
-				}
-			});
-	};
-
-	componentDidMount = () => {
-		let token = localStorage.getItem('jwt_token');
-		if (token) {
-			this.setState({isUserAuthenticated: true})
-		}
-
-		axios
-			.get(process.env.REACT_APP_BACKEND_URL + '/trips', {
-				headers: { 'Content-Type': 'application/json', Authorization: localStorage.getItem('jwt_token') }
-			})
-			.then((res) => {
-				this.setState({ userTrips: res.data.trips });
-				let tripOptions = [];
-				for (let i = 0; i < res.data.trips.length; i++) {
-					let name = res.data.trips[i]['name'];
-					let id = res.data.trips[i]['id'];
-					tripOptions.push({ value: name, label: name, id: id });
-				}
-				this.setState({ userTripOptions: tripOptions });
-			})
-			.catch((err) => {
-				if (err.response) {
-					notify.show('oops! something unexpected occurred', 'error', 1000);
 				} else if (err.request) {
 					console.log(err.request);
 				} else if (err.message) {
@@ -195,7 +194,7 @@ class AddTrip extends React.Component {
 				}
 			})
 			.then((res) => {
-				notify.show(res.data.message, 'success', 1000);
+				notify.show('added trip photo successfully', 'success', 1000);
 				window.location.reload(false);
 			})
 			.catch((err) => {

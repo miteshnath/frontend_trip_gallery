@@ -10,7 +10,6 @@ class Trip extends React.Component {
 		{
 			this.state = {
 				tripId: null,
-				tripId: null,
 				tripName: null,
 				location: null,
 				startDate: null,
@@ -60,6 +59,7 @@ class Trip extends React.Component {
 
 	render() {
 		return (
+			<div>
 			<CRow>
 				<CCol lg={6}>
 					<CCard>
@@ -132,6 +132,8 @@ class Trip extends React.Component {
 					</Carousel>
 				</CCol>
 			</CRow>
+			<Notifications/>
+			</div>
 		);
 	}
 }

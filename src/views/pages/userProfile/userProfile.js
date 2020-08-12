@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
+import {Redirect} from 'react-router'
 import {
 	CButton,
 	CCard,
@@ -39,6 +40,7 @@ class UserProfile extends React.Component {
 				}
 			})
 			.then((res) => {
+				console.log(res.data)
 				this.setState({ userName: res.data.data.username });
 				this.setState({ email: res.data.data.email });
 				this.setState({ profile_file: res.data.data.dp });
@@ -65,7 +67,7 @@ class UserProfile extends React.Component {
 	submitUpdateUserProfile = (event) => {
 		axios
 			.post(
-				'http://localhost:5000/user-profile',
+				process.env.REACT_APP_BACKEND_URL + '/user-profile',
 				{
 					email: this.state.email,
 					username: this.state.username,
@@ -74,8 +76,8 @@ class UserProfile extends React.Component {
 				{ headers: { Authorization: localStorage.getItem('jwt_token'), 'Content-Type': 'application/json' } }
 			)
 			.then((res) => {
-				console.log(res);
-				notify.show(res.data.data.message, 'success', 1000);
+				notify.show("profile updated successfully", 'success', 1000);
+				window.location.reload(false)
 			})
 			.catch((err) => {
 				if (err.response) {
@@ -120,7 +122,7 @@ class UserProfile extends React.Component {
 												type="email"
 												id="email-input"
 												name="email-input"
-												placeholder="Enter Email"
+												placeholder={this.state.email}
 												autoComplete="email"
 												onChange={this.handleEmailChange}
 											/>
@@ -149,7 +151,7 @@ class UserProfile extends React.Component {
 						</CCard>
 					</CCol>
 				</CRow>
-				<Notifications />
+				<Notifications/>
 			</div>
 		);
 	}
