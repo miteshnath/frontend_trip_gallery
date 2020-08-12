@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
+import { Redirect } from 'react-router';
 
 import {
 	CButton,
@@ -44,7 +45,8 @@ class AddTrip extends React.Component {
 			additionalLocation: '',
 			userTrips: [],
 			userTripOptions: [],
-			tripPhotoFile: null
+			tripPhotoFile: null,
+			isUserAuthenticated: false
 		};
 	}
 
@@ -87,6 +89,11 @@ class AddTrip extends React.Component {
 	};
 
 	componentDidMount = () => {
+		let token = localStorage.getItem('jwt_token');
+		if (token) {
+			this.setState({isUserAuthenticated: true})
+		}
+
 		axios
 			.get(process.env.REACT_APP_BACKEND_URL + '/trips', {
 				headers: { 'Content-Type': 'application/json', Authorization: localStorage.getItem('jwt_token') }
@@ -207,7 +214,7 @@ class AddTrip extends React.Component {
 	};
 
 	render() {
-		
+		 
 		return (
 			<div>
 				<CRow>

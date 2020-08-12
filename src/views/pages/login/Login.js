@@ -29,6 +29,13 @@ class Login extends Component {
 		};
 	}
 
+	componentDidMount() {
+		let token = localStorage.getItem('jwt_token')
+		if (token) {
+			this.setState({isUserAuthenticated: true})
+		}
+	}
+
 	setUserName = (event) => {
 		this.setState({ userName: event.target.value });
 	};
