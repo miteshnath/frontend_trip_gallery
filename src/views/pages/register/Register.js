@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Notifications, { notify } from 'react-notify-toast';
+import { Redirect } from 'react-router';
 import {
 	CButton,
 	CCard,
@@ -22,7 +23,8 @@ class Register extends React.Component {
 		this.state = {
 			userName: null,
 			passWord: null,
-			repeatPassWord: null
+			repeatPassWord: null,
+			signedIn: null
 		};
 	}
 
@@ -49,6 +51,7 @@ class Register extends React.Component {
 					{ headers: { 'Content-Type': 'application/json' } }
 				)
 				.then((res) => {
+					this.setState({ signedIn: true });
 					notify.show(res.data.data, 'success', 1000);
 				})
 				.catch((err) => {
@@ -129,6 +132,7 @@ class Register extends React.Component {
 					</CRow>
 				</CContainer>
 				<Notifications options={{ zIndex: 200, top: '50px' }} />
+				{this.state.signedIn && <Redirect to={'/login'} />}
 			</div>
 		);
 	}

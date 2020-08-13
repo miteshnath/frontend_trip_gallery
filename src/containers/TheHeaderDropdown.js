@@ -72,8 +72,8 @@ class TheHeaderDropdown extends React.Component {
 					</div>
 				</CDropdownToggle>
 				<CDropdownMenu className="pt-0" placement="bottom-end">
-					<CDropdownItem>
-						<CIcon name="cil-user" className="mfe-2" onClick={this.handleLogout} />
+					<CDropdownItem onClick={this.handleLogout}>
+						<CIcon name="cil-user" className="mfe-2"  />
 						Logout
 					</CDropdownItem>
 				</CDropdownMenu>
