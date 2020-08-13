@@ -2,15 +2,15 @@ import React from 'react';
 import { CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CImg } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import axios from 'axios';
-import {Redirect} from 'react-router'
+import { Redirect } from 'react-router';
 
 class TheHeaderDropdown extends React.Component {
 	constructor(props) {
 		super(props);
 		{
 			this.state = {
-        dp: null,
-        goToLogin: false,
+				dp: null,
+				goToLogin: false
 			};
 		}
 	}
@@ -28,17 +28,17 @@ class TheHeaderDropdown extends React.Component {
 			})
 			.catch((err) => {
 				if (err.response) {
-					console.log("oops!")
+					console.log('oops!');
 				} else if (err.request) {
 					console.log(err.request);
 				} else if (err.message) {
 					console.log(err.message);
 				}
 			});
-  }
-  
-  handleLogout = () => {
-    axios
+	}
+
+	handleLogout = () => {
+		axios
 			.patch(process.env.REACT_APP_BACKEND_URL + '/logout', {
 				headers: {
 					'Content-Type': 'application/json',
@@ -46,25 +46,24 @@ class TheHeaderDropdown extends React.Component {
 				}
 			})
 			.then((res) => {
-        this.setState({goToLogin: true})
-        localStorage.clear()
+				this.setState({ goToLogin: true });
+				localStorage.clear();
 			})
 			.catch((err) => {
 				if (err.response) {
-					console.log("oops!")
+					console.log('oops!');
 				} else if (err.request) {
 					console.log(err.request);
 				} else if (err.message) {
 					console.log(err.message);
 				}
 			});
-  }
+	};
 
 	render() {
-
-    if (this.state.goToLogin) {
-      return <Redirect to={'/login'} />;
-    }
+		if (this.state.goToLogin) {
+			return <Redirect to={'/login'} />;
+		}
 		return (
 			<CDropdown inNav className="c-header-nav-items mx-2" direction="down">
 				<CDropdownToggle className="c-header-nav-link" caret={false}>
@@ -74,12 +73,11 @@ class TheHeaderDropdown extends React.Component {
 				</CDropdownToggle>
 				<CDropdownMenu className="pt-0" placement="bottom-end">
 					<CDropdownItem>
-						<CIcon name="cil-user" className="mfe-2" onClick={this.handleLogout}/>
+						<CIcon name="cil-user" className="mfe-2" onClick={this.handleLogout} />
 						Logout
 					</CDropdownItem>
 				</CDropdownMenu>
 			</CDropdown>
-      
 		);
 	}
 }
